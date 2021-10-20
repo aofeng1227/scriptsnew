@@ -205,7 +205,7 @@ async function takePostRequest(type) {
             'Connection' : `keep-alive`,
             'Accept' : `application/json, text/plain, */*`,
             'Authorization':`Bearer ${$.accessToken}`,
-            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./utils/USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             'Content-Type':'application/x-www-form-urlencoded',
             'Referer' : `https://ddsj-dz.isvjcloud.com/dd-world/logined_jd/`,
             'Accept-Encoding' : `gzip, deflate`,
