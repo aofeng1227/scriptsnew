@@ -4,8 +4,8 @@
  * @Author: xyDesign && 微信公众号【星云设计资讯】
  * @Date: 2021-10-21 00:25:00
  * @web: http://www.xysheji.cn
- * @LastEditTime: 2021-10-21 00:33:46
- * @FilePath: \scriptsnew\jd_aid_factory.js
+ * @LastEditTime: 2021-10-21 00:43:02
+
  */
 let common = require("./utils/function/common");
 let $ = new common.env('京喜工厂助力');
