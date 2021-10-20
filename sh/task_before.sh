@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Build 20210829-001
+# Build 20211009-001-test
 
 name_js=(
   jd_fruit
@@ -247,8 +247,8 @@ combine_all() {
 ## 正常依次运行时，组合互助码格式化为全局变量
 combine_only() {
     for ((i = 0; i < ${#env_name[*]}; i++)); do
-        case $first_param in
-            *${name_js[i]}.js | *${name_js[i]}.ts)
+        case $1 in
+            *${name_js[i]}*.js | *${name_js[i]}*.ts)
 	            if [[ -f $dir_log/.ShareCode/${name_config[i]}.log ]]; then
                     . $dir_log/.ShareCode/${name_config[i]}.log
                     result=$(combine_sub ${var_name[i]})
@@ -269,7 +269,7 @@ TempBlock_JD_COOKIE && TempBlock_JD_PT_PIN && Random_JD_COOKIE
 if [ $scr_name ]; then
     team_task
 else
-    combine_only
+	combine_only "$1"
 fi
 
 #if [[ $(ls $dir_code) ]]; then

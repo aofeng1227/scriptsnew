@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Build 20210830-001
+## Build 20211009-001
 
 ## 导入通用变量与函数
 dir_shell=/ql/shell
@@ -9,14 +9,14 @@ dir_shell=/ql/shell
 ## 预设的仓库及默认调用仓库设置
 ## 将"repo=$repo1"改成repo=$repo2"或其他，以默认调用其他仓库脚本日志
 ## 也可自行搜索本脚本内的"name_js=("和"name_js_only",将"repo"改成"repo2"或其他，用以自由组合调用仓库的脚本日志
-repo1='panghu999_jd_scripts'                       #预设的 panghu999 仓库
+repo1='aofeng1227_scriptsnew'                       #预设的 aofeng1227_scriptsnew 仓库
 repo2='JDHelloWorld_jd_scripts'                    #预设的 JDHelloWorld 仓库
 repo3='he1pu_JDHelp'                               #预设的 he1pu 仓库
 repo4='shufflewzc_faker2'                          #预设的 shufflewzc 仓库
 repo5='Wenmoux_scripts_wen_chinnkarahoi'           #预设的 Wenmoux 仓库，用于读取口袋书店互助码。需提前拉取温某人的仓库或口袋书店脚本并完整运行。
 repo6='Aaron-lv_sync_jd_scripts'                   #预设的 Aaron-lv 仓库
 repo7='smiek2221_scripts'                          #预设的 smiek2221 仓库
-repo=$repo4                                        #默认调用 shufflewzc_faker2 仓库脚本日志
+repo=$repo1                                        #默认调用 aofeng1227_scriptsnew 仓库脚本日志
 
 ## 调试模式开关，默认是0，表示关闭；设置为1，表示开启
 DEBUG="1"
@@ -36,7 +36,7 @@ CLEANBAK_DAYS="2"
 ## 填 0 使用“全部一致互助模板”，所有账户要助力的码全部一致
 ## 填 1 使用“均等机会互助模板”，所有账户获得助力次数一致
 ## 填 2 使用“随机顺序互助模板”，本套脚本内账号间随机顺序助力，每次生成的顺序都不一致。
-HelpType="1"
+HelpType=""
 
 ## 定义指定活动采用指定的互助模板。
 ## 设定值为 DiyHelpType="1" 表示启用功能；不填或填其他内容表示不开启功能。
@@ -79,7 +79,7 @@ UpdateType="1"
 ## 定义是否自动安装或修复缺失的依赖，默认为1，表示自动修复；留空或其他数值表示不修复。
 FixDependType="1"
 ## 定义监控修复的依赖名称
-package_name="canvas png-js date-fns axios crypto-js ts-md5 tslib @types/node dotenv typescript fs require tslib"
+package_name="canvas png-js date-fns axios crypto-js ts-md5 tslib @types/node dotenv typescript fs require tslib jsdom"
 
 ## 需组合的环境变量列表，env_name需要和var_name一一对应，如何有新活动按照格式添加(不懂勿动)
 env_name=(
@@ -138,7 +138,7 @@ name_js=(
   "$repo"_jd_health
   "$repo"_jd_carnivalcity
   "$repo"_jd_city
-  "$repo4"_jd_moneyTree_heip
+  "$repo"_jd_moneyTree_heip
   "$repo"_jd_cfd
 )
 

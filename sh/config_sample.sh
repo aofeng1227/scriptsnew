@@ -1,6 +1,6 @@
 ## Version: v2.8.0
 ## Date: 2021-06-20
-## Mod: Build20210910-003
+## Mod: Build20211009-001
 ## Update Content: 可持续发展纲要\n1. session管理破坏性修改\n2. 配置管理可编辑config下文件\n3. 自定义脚本改为查看脚本\n4. 移除互助相关
 
 ## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
@@ -15,7 +15,7 @@ AutoAddCron="true"
 DefaultCronRule="37 0 * * *"
 
 ## ql repo命令拉取脚本时需要拉取的文件后缀，直接写文件后缀名即可
-RepoFileExtensions="js py ts"
+RepoFileExtensions="js py sh ts"
 
 ## 由于github仓库拉取较慢，所以会默认添加代理前缀，如不需要请移除
 GithubProxyUrl="https://ghproxy.com/"
@@ -103,6 +103,18 @@ export PUSH_PLUS_TOKEN=""
 ## 下方填写您的一对多推送的 "群组编码" ，（一对多推送下面->您的群组(如无则新建)->群组编码）
 ## 1. 需订阅者扫描二维码 2、如果您是创建群组所属人，也需点击“查看二维码”扫描绑定，否则不能接受群组消息推送
 export PUSH_PLUS_USER=""
+
+## 仅指定的脚本采用 pushplus 推送
+## case $1 in
+##     ccwav_QLScript2_jd_bean_change* | ccwav_QLScript2_jd_CheckCK* | *jd_scripts_jd_dreamFactory* | *jd_jxgc* | *jd_pigPet* )
+##         export PUSH_PLUS_TOKEN=""                                                                                             ##填写 pushplus 的 token
+##         export PUSH_PLUS_USER=""                                                                                              #填写 pushplus 的群组名称，不填的话只推送到 pushplus 的个人消息
+##         ;;
+##     *)
+##         export PUSH_PLUS_TOKEN=""                                                                                             ##必填项。默认为空，表示其他脚本不推送 pushplus。
+##         export PUSH_PLUS_USER=""                                                                                              ##必填项。默认为空，表示其他脚本不推送 pushplus 群组。
+##         ;;
+## esac
 
 ## 9. go-cqhttp
 ## gobot_url 推送到个人QQ: http://127.0.0.1/send_private_msg  群：http://127.0.0.1/send_group_msg 
@@ -226,6 +238,14 @@ esac
 ### 环境变量填写要求较高，建议群组内确认填写结果
 scr_name="$1"                                 ## 不可删除
 case $1 in
+    *jd_teamAnjia*)                           ## 安佳组队瓜分京豆
+        teamer_num="5"                        ## 单个队伍中的总账号数为 80 个
+        team_num="20"                         ## 每个账号发起组队的最大队伍数为 3 个
+        ;;
+    *jd_jxlhb*)                               ## 京喜领88元红包
+        teamer_num="80"                       ## 单个队伍中的总账号数为 80 个
+        team_num="3"                          ## 每个账号发起组队的最大队伍数为 3 个
+        ;;
     *jd_sendBean* | *jd_sddd*)                ## 送豆得豆活动脚本关键词
         teamer_num="11"                       ## 单个队伍中的总账号数为 11 个
         team_num="1"                          ## 每个账号发起组队的最大队伍数为 1 个
@@ -355,6 +375,7 @@ export PURCHASE_SHOPS="true"
 export TUAN_ACTIVEID=""
 ## 22、京东UA。点点券脚本运行环境变量
 export JD_USER_AGENT=""
+
 # curtinlv 环境变量
 ## 1、赚京豆
 ### 助力账号，填写pt_pin或用户名的值，如 zlzh = ['aaaa','xxxx','yyyy'] ，支持ENV
@@ -399,19 +420,6 @@ export starttime="23:59:59.00000000"
 ### 结束时间
 export endtime="00:00:30.00000000"
 
-# Wenmoux 部分环境变量 
-## 1、QQ星系牧场自动兑换20豆
-export Cowexchange="true"
-## 2、欧洲狂欢杯兑换兑换豆子，填38豆子，填39e卡
-export Cupexid="39"
-## 3、10秒阅读
-### 填写自己CK
-export Readck=""
-### 填写自己设备UA
-export Read10UA=""
-### 填true推送消息，默认不推送
-export jrpush=""
-
 # smiek2221 环境变量
 ## 1、京东签到图形验证修改火爆问题
 ### 如果 read ECONNRESET 错误 可以试试
@@ -428,12 +436,14 @@ export gua_wealth_island_serviceNum="500"
 ## 4、修复点点券
 ### 新增显示有多少个非法请求 可以开通知 
 export DDQ_NOTIFY_CONTROL="" ##不填或false为通知，true为不通知
-## 5、 24 及之后的开卡变量
+## 5、24 及之后的开卡变量
 export guaopencard_All="true"
 export guaopencard_addSku_All="true"
 export guaopencardRun_All="true"
 export guaopencard_draw="true"
 export guaunknownTask_addSku_All="true"
+export guaunknownTask_card_All="true"
+export gua_carnivalcity_draw="true"
 
 # cdle 环境变量
 ## 1、签到领现金兑换
@@ -505,44 +515,79 @@ export CleanUsers=""
 ## [1] jd_CheckCK.js
 ### 当有自动禁用或自动启用事件发生才会发送通知，如果要每次都通知则需设定变量
 ### 自动检测账号是否正常，不正常的自动禁用，正常的如果是禁用状态则自动启用
-export SHOWSUCCESSCK="false" ##显示正常CK，true为显示
-export CKALWAYSNOTIFY="false" ##通知CK状态，true为永远通知 
-export CKAUTOENABLE="true" ##自动启用CK，false为停用
-export CKREMARK="true" ##显示CK备注，false为不显示
-export CKNOWARNERROR="true" ##服务器空数据等错误不触发通知，false为通知
+export CHECKCK_SHOWSUCCESSCK="false" ##显示正常CK，true为显示
+export CHECKCK_CKALWAYSNOTIFY="true" ##通知CK状态，true为永远通知 
+export CHECKCK_CKAUTOENABLE="false" ##自动启用CK，false为停用
+export CHECKCK_CKNOWARNERROR="true" ##服务器空数据等错误不触发通知，false为通知
 ## [2] jd_bean_change.js
 ### 自用的京东资产变动查询加强版
+### 京东资产变动 + 白嫖榜 + 京东月资产变动,注意事项:如果你遇到TG Bark报错，那是因为报文过长，请使用分段通知功能.
+### 1. BEANCHANGE_PERSENT  分段通知
+### 例：export BEANCHANGE_PERSENT="10"总共有22个账号,结果会分成3条推送通知，1~10为第一条推送，11~20为第二条推送，剩余的为第三条推送
 export BEANCHANGE_PERSENT="10" ##10合1
+### 2. BEANCHANGE_USERGP2 BEANCHANGE_USERGP3 BEANCHANGE_USERGP4  根据Pt_Pin的值进行分组通知
+### 注意：分组通知会强制禁用BEANCHANGE_PERSENT变量!	
+### 分组通知的通知标题为 脚本名+"#"+分组数值
+### 主要用于搭配通知脚本的分组通知使用.
+### 3. BEANCHANGE_ENABLEMONTH
+### 每月1号17点后如果执行资产查询，开启京东月资产变动的统计和推送.	
+### 拆分通知和分组通知的变量都可以兼容.	
+### 标题按照分组分别为 京东月资产变动 京东月资产变动#2 京东月资产变动#3 	
+### 开启 :  export BEANCHANGE_ENABLEMONTH="true"  
 ## [3] sendNotify.js
 ### 1. 通知黑名单
 ### 如果通知标题在此变量里面存在（&隔开），则用屏蔽不发送通知，继承Ninja。例：export NOTIFY_SKIP_LIST="京东CK检测&京东资产变动"
-export NOTIFY_SKIP_LIST=""
-### 2. 第2套通知
-### 如果通知标题在此变量里面存在（&隔开），则用第2套推送变量进行配置。例：export NOTIFY_GROUP_LIST="京东CK检测&京东资产变动&Ninja 运行通知"
-### 以企业微信为例，企业微信配置了 QYWX_AM 和 QYWX_AM2，则执行京东资产变动时会推送到 QYWX_AM2 配置的企业微信
-export NOTIFY_GROUP_LIST=""
-### 3. REMARK处理
+export NOTIFY_SKIP_NAMETYPELIST=""
+### 2. 多套通知。NOTIFY_GROUP2_LIST NOTIFY_GROUP3_LIST NOTIFY_GROUP4_LIST NOTIFY_GROUP5_LIST NOTIFY_GROUP6_LIST
+### 如果通知标题在此变量里面存在(&隔开),则用第2/3/4/5/6套推送变量进行配置.
+##分组2推送
+## export PUSH_PLUS_TOKEN_hxtrip2=""
+## export PUSH_PLUS_USER_hxtrip2=""
+export PUSH_PLUS_TOKEN2=""
+export PUSH_PLUS_USER2=""
+export TG_BOT_TOKEN2=""
+export TG_USER_ID2=""
+### export NOTIFY_GROUP2_LIST="京东白嫖榜&京东月资产变动&省钱大赢家之翻翻乐&京东CK检测&京喜工厂&金融养猪"
+### 3. NOTIFY_SHOWNAMETYPE
 ### 例：账号名:ccwav  别名:ccwav的别名  Remark:代码玩家
-export SHOWREMARKTYPE="1"    ##效果: 账号名称：代码玩家
-#export SHOWREMARKTYPE="2"   ##效果: 账号名称：ccwav的别名(代码玩家)
-#export SHOWREMARKTYPE="3"   ##不做处理，效果: 账号名称：ccwav   
-#export SHOWREMARKTYPE="4"   ##不做处理，效果: 账号名称：ccwav(代码玩家)
-### 4. REAMARK跳过
-### 单独指定某些脚本不做REMARK处理，京东CK检测加了处理Remark，所以最好是加上不处理
-export NOTIFY_SKIP_REMARK_LIST="京东CK检测"
-### 5. 第2套兑换通知
-### 东东农场 东东萌宠 京喜工厂，这三个任务接收到产品可以兑换通知时推送到群组2
-### 以企业微信为例，企业微信配置了 QYWX_AM 和 QYWX_AM2，则发送兑换通知时会推送到 QYWX_AM2 配置的企业微信
-export NOTIFY_COMPTOGROUP2="false" ##true为推送到群组2
+#export NOTIFY_SHOWNAMETYPE="1"    ##效果: 账号名称：代码玩家
+export NOTIFY_SHOWNAMETYPE="2"     ##效果: 账号名称：ccwav的别名(代码玩家)
+#export NOTIFY_SHOWNAMETYPE="3"    ##不做处理，效果: 账号名称：ccwav   
+#export NOTIFY_SHOWNAMETYPE="4"    ##不做处理，效果: 账号名称：ccwav(代码玩家)
+### 4. NOTIFY_SKIP_NAMETYPELIST
+### 单独指定某些脚本不做NOTIFY_SHOWNAMETYPE变量处理。例：export NOTIFY_SKIP_NAMETYPELIST="东东农场&东东工厂"
+export NOTIFY_SKIP_NAMETYPELIST=""
+### 5. NOTIFY_NOREMIND
+### 对 东东农场领取 东东萌宠领取 京喜工厂领取 汪汪乐园养joy领取 脚本任务更新的通知进行屏蔽,可自行删减.
+### export NOTIFY_NOREMIND="京喜工厂&汪汪乐园养joy"
 ### 6. 屏蔽ck失效通知
 ### 执行所有脚本时，如果有单独推送CK失效的请求也不会推送失效通知
 export NOTIFY_NOCKFALSE="true"
-### 7. 测试人
+### 7. NOTIFY_AUTHOR
 ### 通知底部显示：本通知 By 测试人
 #export NOTIFY_AUTHOR="测试人"
-### 8. 屏蔽登录成功
-### 屏蔽青龙登陆成功通知，登陆失败不屏蔽
+### 8. NOTIFY_NOLOGINSUCCESS
+### 屏蔽青龙登陆成功通知，登陆失败不屏蔽(新版貌似可以直接设定了)
 export NOTIFY_NOLOGINSUCCESS="true"
+### 9. NOTIFY_CUSTOMNOTIFY
+### 强大的自定义通知，格式为 脚本名称&推送组别&推送类型 (推送组别总共5组)
+### 推送类型: Server酱&pushplus&Bark&TG机器人&钉钉&企业微信机器人&企业微信应用消息&iGotNotify&gobotNotify
+### export NOTIFY_CUSTOMNOTIFY=["京东资产变动&组1&Server酱&Bark&企业微信应用消息&TG机器人&iGotNotify","京东白嫖榜&组1&TG机器人&pushplus&iGotNotify","京东CK检测&组1&TG机器人&pushplus&iGotNotify"]
+export NOTIFY_CUSTOMNOTIFY=""
+### 10. NOTIFY_CKTASK
+### 当接收到发送CK失效通知和Ninja 运行通知时候执行子线程任务,支持js py ts
+### export NOTIFY_CKTASK="jd_CheckCK.js"
+### 11. PUSH_PLUS_TOKEN_hxtrip 和 PUSH_PLUS_USER_hxtrip
+### 增加pushplus.hxtrip.com的推送加接口，貌似更稳定,普通用法和NOTIFY_CUSTOMNOTIFY用法同PUSH_PLUS.
+export PUSH_PLUS_TOKEN_hxtrip=""
+export PUSH_PLUS_USER_hxtrip=""
+### 12. jd_joy_reward_Mod.js 宠汪汪积分兑换有就换版
+export JOY_GET20WHEN16="true"  ##控制16点才触发20京豆兑换.
+### 13. CK失效时执行脚本
+export NOTIFY_CKTASK="ccwav_QLScript2_jd_CheckCK.js"
+### 14. 开启月结资产推送
+export BEANCHANGE_ENABLEMONTH="true"
+
 
 # X1a0He 环境变量
 ## 1、简化版京东日资产变动通知
@@ -585,3 +630,7 @@ export JD_UNSUB_GKEYWORDS=""
 export JD_UNSUB_SKEYWORDS=""
 export JD_UNSUB_INTERVAL="3000"
 export JD_UNSUB_PLOG="true"
+
+# jiulan 环境变量
+export JOYPARK_JOY_START="120"     # 只做前几个CK
+export JOY_COIN_MAXIMIZE="1"       # 最大化硬币收益，如果合成后全部挖土后还有空位，则开启此模式（默认关闭） 0关闭 1开启
