@@ -19,7 +19,7 @@ cron "13 1,22,23 * * *" script-path=jd_daily_lottery.js, tag=每日抽奖
 */
 const $ = new Env('小鸽有礼-每日抽奖');
 const notify = $.isNode() ? require('./sendNotify') : '';
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./utils/jdCookie.js') : '';
 let activityType = '';
 let activityCode = '';
 const activityInfoList = [
