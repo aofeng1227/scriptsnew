@@ -4,11 +4,11 @@
  * @Author: xyDesign && 微信公众号【星云设计资讯】
  * @Date: 2021-10-21 00:25:00
  * @web: http://www.xysheji.cn
- * @LastEditTime: 2021-10-21 00:43:02
+ * @LastEditTime: 2021-10-21 12:43:48
 
  */
 let common = require("./utils/function/common");
-let $ = new common.env('京喜工厂助力');
+const $ = new Env('京喜工厂助力');
 let min = 3,
     help = $.config[$.filename(__filename)] || Math.min(min, $.config.JdMain) || min;
 $.setOptions({
