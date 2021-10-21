@@ -355,6 +355,7 @@ function uploadShareCode(code) {
             } else if (data === 'exist') {
               console.log(`助力码已经提交过了~\n`)
             } else if (data === 'not in whitelist') {
+              console.log(data)
               console.log(`提交助力码失败，此用户不在白名单中\n`)
             } else {
               console.log(`未知错误：${data}\n`)
