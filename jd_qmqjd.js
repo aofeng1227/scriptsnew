@@ -283,7 +283,7 @@ let toChinesNum = (num) => {
 
 function requireConfig() {
      return new Promise(resolve => {
-          const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+          const jdCookieNode = $.isNode() ? require('./utils/jdCookie') : '';
           if ($.isNode()) {
                Object.keys(jdCookieNode).forEach((item) => {
                     if (jdCookieNode[item]) {
