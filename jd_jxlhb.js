@@ -21,7 +21,7 @@ cron "4 2,10 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/
  */
 const $ = new Env('京喜领88元红包');
 const notify = $.isNode() ? require('./sendNotify') : {};
-const jdCookieNode = $.isNode() ? require('./utils/jdCookie.js') : {};
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
 let cookiesArr = [], cookie = '';
 let UA, UAInfo = {}, codeInfo = {}, token;
 if ($.isNode()) {
@@ -282,7 +282,7 @@ function openRedPack(strPin, grade) {
 }
 
 function getAuthorShareCode(url) {
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     const options = {
       url: `${url}?${new Date()}`, "timeout": 10000, headers: {
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
@@ -302,16 +302,15 @@ function getAuthorShareCode(url) {
     }
     $.get(options, async (err, resp, data) => {
       try {
-        if (err) {
-        } else {
-          if (data) data = JSON.parse(data)
-        }
+        resolve(JSON.parse(data))
       } catch (e) {
         // $.logErr(e, resp)
       } finally {
-        resolve(data);
+        resolve();
       }
     })
+    await $.wait(10000)
+    resolve();
   })
 }
 
@@ -352,7 +351,7 @@ function TotalBean() {
         Accept: "*/*",
         Connection: "keep-alive",
         Cookie: cookie,
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./utils/USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         "Accept-Language": "zh-cn",
         "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
         "Accept-Encoding": "gzip, deflate, br"
