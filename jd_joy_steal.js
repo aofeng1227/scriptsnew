@@ -28,7 +28,7 @@ $.get = zooFaker.injectToRequest2($.get.bind($));
 $.post = zooFaker.injectToRequest2($.post.bind($));
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
-const jdCookieNode = $.isNode() ? require('../utils/jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./utils/jdCookie.js') : '';
 let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000);
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';

@@ -25,7 +25,7 @@ const zooFaker = require('./utils/JDJRValidator_Pure');
 $.get = zooFaker.injectToRequest2($.get.bind($));
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
-const jdCookieNode = $.isNode() ? require('../utils/jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./utils/jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
