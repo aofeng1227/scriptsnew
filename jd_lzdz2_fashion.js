@@ -1,10 +1,15 @@
 /*
 时尚宠粉趴
 https://lzdz2-isv.isvjcloud.com/dingzhi/fashion/recruit/activity/13145?activityId=1ad06f0cb93e4928a894e3b984c2fa4b
+
+==============Loon==============
+[Script]
+cron "4 2,10 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_lzdz2_fashion.js,tag=超店会员福利社
+
 **/
 
 const $ = new Env("超店会员福利社");
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./utils/jdCookie') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 let ownCode = null;
