@@ -1,7 +1,7 @@
 /*
  * @Author: X1a0He
  * @Date: 2021-09-04 11:50:47
- * @LastEditTime: 2021-11-11 22:28:06
+ * @LastEditTime: 2021-11-11 22:28:37
  * @LastEditors: Please set LastEditors
  * @Description: 批量取关京东店铺和商品
  * @Fixed: 不再支持Qx，仅支持Node.js
@@ -149,6 +149,7 @@ let args_xh = {
                     }
                     if($.failTimes >= args_xh.failTimes){
                         console.log('失败次数到达设定值，触发防死循环机制，该帐号已跳过');
+                        break
                     }
                 } while(true)
                 await showMsg_xh();
