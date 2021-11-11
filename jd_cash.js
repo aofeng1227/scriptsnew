@@ -24,7 +24,7 @@ const $ = new Env('签到领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./utils/jdCookie.js') : '';
-let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
+let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let helpAuthor = true;
@@ -488,7 +488,9 @@ function showMsg() {
     resolve()
   })
 }
-function readShareCode() {
+
+//随机取个码放到您固定的互助码后面
+/* function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
     $.get({url: `http://code.chiang.fun/api/v1/jd/jdcash/read/${randomCount}/`, 'timeout': 30000}, (err, resp, data) => {
@@ -511,7 +513,7 @@ function readShareCode() {
     await $.wait(30000);
     resolve()
   })
-}
+} */
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
