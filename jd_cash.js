@@ -490,7 +490,7 @@ function showMsg() {
 }
 
 //随机取个码放到您固定的互助码后面
-/* function readShareCode() {
+ function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
     $.get({url: `http://code.chiang.fun/api/v1/jd/jdcash/read/${randomCount}/`, 'timeout': 30000}, (err, resp, data) => {
@@ -513,7 +513,7 @@ function showMsg() {
     await $.wait(30000);
     resolve()
   })
-} */
+} 
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
