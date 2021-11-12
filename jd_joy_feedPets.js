@@ -36,10 +36,10 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-let jdNotify = true;//是否开启静默运行。默认true开启
+let jdNotify = false;//是否开启静默运行。默认true开启
 let message = '', subTitle = '';
 const JD_API_HOST = 'https://jdjoy.jd.com'
-let FEED_NUM = ($.getdata('joyFeedCount') * 1) || 40;   //喂食数量默认10g,可选 10,20,40,80 , 其他数字不可.
+let FEED_NUM = ($.getdata('joyFeedCount') * 1) || 80;   //喂食数量默认10g,可选 10,20,40,80 , 其他数字不可.
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});

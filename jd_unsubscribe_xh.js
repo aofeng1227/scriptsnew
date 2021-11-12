@@ -30,7 +30,7 @@ let args_xh = {
      * 执行完毕是否进行通知，默认false
      * 可用环境变量控制：JD_TRY_PLOG
      * */
-    isNotify: process.env.JD_UNSEB_NOTIFY || false,
+    isNotify: process.env.JD_UNSEB_NOTIFY || true,
     /*
      * 每次获取已关注的商品数
      * 可设置环境变量：JD_UNSUB_GPAGESIZE，默认为20，不建议超过20
@@ -55,7 +55,7 @@ let args_xh = {
      * 间隔，防止提示操作频繁，单位毫秒(1秒 = 1000毫秒)
      * 可用环境变量控制：JD_UNSUB_INTERVAL，默认为3000毫秒
      * */
-    unSubscribeInterval: process.env.JD_UNSUB_INTERVAL * 1 || 1000,
+    unSubscribeInterval: process.env.JD_UNSUB_INTERVAL * 1 || 3000,
     /*
      * 是否打印日志
      * 可用环境变量控制：JD_UNSUB_PLOG，默认为true
