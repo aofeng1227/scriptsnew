@@ -9,7 +9,7 @@ ql repo https://ghproxy.com/https://github.com/aofeng1227/scriptsnew.git
 
 utils工具库拉取命令
 
-ql repo https://ghproxy.com/https://github.com/aofeng1227/scriptsnew_utils "jd_|jx_|gua_" "overdue|sh" "utils"
+ql repo https://ghproxy.com/https://github.com/aofeng1227/scriptsnew_utils.git "jd_|jx_|gua_" "overdue|sh" "utils"
 ```
 
 
