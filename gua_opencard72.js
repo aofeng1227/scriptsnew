@@ -1,46 +1,47 @@
 /*
-11.09~11.17 大牌联合 11.11狂欢购 [gua_opencard66.js]
+11.25~12.1 全球大牌盛典 黑五狂欢购 [gua_opencard72.js]
 新增开卡脚本
 一次性脚本
 
-1.邀请一人20豆
-2.开2组(共11张) 成功开1组 获得1次抽奖
+1.邀请一人10豆
+2.开2组(共8张) 成功开1组 获得1次抽奖
   抽奖可能获得30京豆
 3.关注10豆 
 4.加购5京豆
-  (默认不加购 如需加购请设置环境变量[guaopencard_addSku66]为"true"
+  (默认不加购 如需加购请设置环境变量[guaopencard_addSku72]为"true"
 5.浏览店铺1豆/个
+6.浏览商品1豆/个
 
 第一个账号助力作者 其他依次助力CK1
 第一个CK失效会退出脚本
 
 默认脚本不执行
 如需执行脚本请设置环境变量
-guaopencard66="true"
+guaopencard72="true"
 每个账号之间延迟 100=延迟100秒 0=延迟0秒会使用每3个账号延迟60秒
 guaopenwait_All 所有
-guaopenwait66="0"
+guaopenwait72="0"
 
 
 All变量适用
 ————————————————
-入口：[ 11.09~11.17 大牌联合 11.11狂欢购 (https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=8tbv4uc5g8lb34g1orei354wwky1109&shareUuid=20c2619959fd4deda963279e628414df)]
+入口：[ 11.25~12.1 全球大牌盛典 黑五狂欢购 (https://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=dzkwdlt20211125A&shareUuid=18103d0ad7334baeadff07e24ff7d3d4)]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
-cron:47 3 9-17 11 *
+cron:47 3 25-30,1 11,12 *
 ============Quantumultx===============
 [task_local]
-#11.09~11.17 大牌联合 11.11狂欢购
-47 3 9-17 11 * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_opencard66.js, tag=11.09~11.17 大牌联合 11.11狂欢购, enabled=true
+#11.25~12.1 全球大牌盛典 黑五狂欢购
+47 3 25-30,1 11,12 * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_opencard72.js, tag=11.25~12.1 全球大牌盛典 黑五狂欢购, enabled=true
 
 */
 let guaopencard_addSku = "false"
 let guaopencard = "false"
 let guaopenwait = "0"
 
-const $ = new Env('11.09~11.17 大牌联合 11.11狂欢购');
+const $ = new Env('11.25~12.1 全球大牌盛典 黑五狂欢购');
 const jdCookieNode = $.isNode() ? require('./utils/jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cleanCart = ''
@@ -66,11 +67,11 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku66 ? process.env.guaopencard_addSku66 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku66') ? $.getdata('guaopencard_addSku66') : `${guaopencard_addSku}`);
+guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku72 ? process.env.guaopencard_addSku72 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku72') ? $.getdata('guaopencard_addSku72') : `${guaopencard_addSku}`);
 guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku_All ? process.env.guaopencard_addSku_All : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku_All') ? $.getdata('guaopencard_addSku_All') : `${guaopencard_addSku}`);
-guaopencard = $.isNode() ? (process.env.guaopencard66 ? process.env.guaopencard66 : `${guaopencard}`) : ($.getdata('guaopencard66') ? $.getdata('guaopencard66') : `${guaopencard}`);
+guaopencard = $.isNode() ? (process.env.guaopencard72 ? process.env.guaopencard72 : `${guaopencard}`) : ($.getdata('guaopencard72') ? $.getdata('guaopencard72') : `${guaopencard}`);
 guaopencard = $.isNode() ? (process.env.guaopencard_All ? process.env.guaopencard_All : `${guaopencard}`) : ($.getdata('guaopencard_All') ? $.getdata('guaopencard_All') : `${guaopencard}`);
-guaopenwait = $.isNode() ? (process.env.guaopenwait66 ? process.env.guaopenwait66 : `${guaopenwait}`) : ($.getdata('guaopenwait66') ? $.getdata('guaopenwait66') : `${guaopenwait}`);
+guaopenwait = $.isNode() ? (process.env.guaopenwait72 ? process.env.guaopenwait72 : `${guaopenwait}`) : ($.getdata('guaopenwait72') ? $.getdata('guaopenwait72') : `${guaopenwait}`);
 guaopenwait = $.isNode() ? (process.env.guaopenwait_All ? process.env.guaopenwait_All : `${guaopenwait}`) : ($.getdata('guaopenwait_All') ? $.getdata('guaopenwait_All') : `${guaopenwait}`);
 guaopenwait = parseInt(guaopenwait, 10) || 0
 allMessage = ""
@@ -83,7 +84,7 @@ let activityCookie =''
 !(async () => {
   if ($.isNode()) {
     if(guaopencard+"" != "true"){
-      console.log('如需执行脚本请设置环境变量[guaopencard66]为"true"')
+      console.log('如需执行脚本请设置环境变量[guaopencard72]为"true"')
     }
     if(guaopencard+"" != "true"){
       return
@@ -95,8 +96,8 @@ let activityCookie =''
     });
     return;
   }
-  $.activityId = "8tbv4uc5g8lb34g1orei354wwky1109"
-  $.shareUuid = "20c2619959fd4deda963279e628414df"
+  $.activityId = "dzkwdlt20211125A"
+  $.shareUuid = "18103d0ad7334baeadff07e24ff7d3d4"
   console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/dz/openCard/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
@@ -227,7 +228,7 @@ async function run() {
           await cleanCart.clean(cookie,'https://jd.smiek.tk/jdcleancatr_21102717',goodsArr || [])
         }
       }else{
-        console.log('如需加购请设置环境变量[guaopencard_addSku66]为"true"');
+        console.log('如需加购请设置环境变量[guaopencard_addSku72]为"true"');
       }
     }
     $.runFalag = true
@@ -239,6 +240,19 @@ async function run() {
         if(v.value && v.status === 0){
           $.toShopValue = v.value
           await takePostRequest('toShop');
+          await $.wait(parseInt(Math.random() * 3000 + 3000, 10))
+        }
+      }
+    }
+    $.runFalag = true
+    $.log("浏览商品: " + $.visitSku)
+    if(!$.visitSku && !$.outFlag){
+      flag = true
+      for(let v of $.visitSkuList || []){
+        if($.runFalag == false) break
+        if(v.value && v.status === 0){
+          $.visitSkuValue = v.value
+          await takePostRequest('visitSku');
           await $.wait(parseInt(Math.random() * 3000 + 3000, 10))
         }
       }
@@ -470,6 +484,8 @@ async function dealReturn(type, data) {
             }
             $.toShop = res.data.toShop.allStatus || false
             $.toShopList = res.data.toShop.settings || []
+            $.visitSku = res.data.visitSku.allStatus || false
+            $.visitSkuList = res.data.visitSku.settings || []
           }else if(res.errorMessage){
             console.log(`${type} ${res.errorMessage || ''}`)
           }else{
