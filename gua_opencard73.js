@@ -1,16 +1,16 @@
 /*
-11.25~11.30 联合开卡 [gua_opencard71.js]
+11.27~12.2 联合开卡 [gua_opencard73.js]
 新增开卡脚本
 一次性脚本
 
 1.邀请一人20豆(有可能没有豆
-2.开13张 成功开1张 可能获得5京豆
+2.开12张 成功开1张 可能获得5京豆
   全部开完获得1次抽奖
 3.关注10京豆 获得1次抽奖
-4.加购5京豆 获得1次抽奖(默认不加购 如需加购请设置环境变量[guaopencard_addSku71]为"true"
-5.抽奖 (默认不抽奖 如需抽奖请设置环境变量[guaopencard_draw71]为"3"
+4.加购5京豆 获得1次抽奖(默认不加购 如需加购请设置环境变量[guaopencard_addSku73]为"true"
+5.抽奖 (默认不抽奖 如需抽奖请设置环境变量[guaopencard_draw73]为"3"
 填写要抽奖的次数 不足已自身次数为准
-guaopencard_draw71="3"
+guaopencard_draw73="3"
 填非数字会全都抽奖
 
 第一个账号助力作者 其他依次助力CK1
@@ -18,25 +18,26 @@ guaopencard_draw71="3"
 
 默认脚本不执行
 如需执行脚本请设置环境变量
-guaopencard71="true"
+guaopencard73="true"
 每个账号之间延迟 100=延迟100秒 0=延迟0秒会使用每3个账号延迟60秒
 guaopenwait_All 所有
-guaopenwait71="0"
+guaopenwait73="0"
 
 
 All变量适用
 ————————————————
-入口：[ 11.25~11.30 联合开卡 (https://3.cn/103-xOl0F)]
+入口：[ 11.27~12.2 联合开卡 (https://3.cn/103-yMSRX)]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
+19:/￥W4Mfa1wJvFo0eJ%
 
-cron:47 2 25-30 11 *
+cron:47 4 27-30,1,2 11,12 *
 ============Quantumultx===============
 [task_local]
-#11.25~11.30 联合开卡
-47 2 25-30 11 * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_opencard71.js, tag=11.25~11.30 联合开卡, enabled=true
+#11.27~12.2 联合开卡
+47 4 27-30,1,2 11,12 * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_opencard73.js, tag=11.27~12.2 联合开卡, enabled=true
 
 */
 let guaopencard_addSku = "false"
@@ -44,7 +45,7 @@ let guaopencard = "false"
 let guaopenwait = "0"
 let guaopencard_draw = "0"
 
-const $ = new Env('11.25~11.30 联合开卡-71');
+const $ = new Env('11.27~12.2 联合开卡-73');
 const jdCookieNode = $.isNode() ? require('./utils/jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cleanCart = ''
@@ -69,14 +70,14 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 
-guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku71 ? process.env.guaopencard_addSku71 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku71') ? $.getdata('guaopencard_addSku71') : `${guaopencard_addSku}`);
+guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku73 ? process.env.guaopencard_addSku73 : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku73') ? $.getdata('guaopencard_addSku73') : `${guaopencard_addSku}`);
 guaopencard_addSku = $.isNode() ? (process.env.guaopencard_addSku_All ? process.env.guaopencard_addSku_All : `${guaopencard_addSku}`) : ($.getdata('guaopencard_addSku_All') ? $.getdata('guaopencard_addSku_All') : `${guaopencard_addSku}`);
-guaopencard = $.isNode() ? (process.env.guaopencard71 ? process.env.guaopencard71 : `${guaopencard}`) : ($.getdata('guaopencard71') ? $.getdata('guaopencard71') : `${guaopencard}`);
+guaopencard = $.isNode() ? (process.env.guaopencard73 ? process.env.guaopencard73 : `${guaopencard}`) : ($.getdata('guaopencard73') ? $.getdata('guaopencard73') : `${guaopencard}`);
 guaopencard = $.isNode() ? (process.env.guaopencard_All ? process.env.guaopencard_All : `${guaopencard}`) : ($.getdata('guaopencard_All') ? $.getdata('guaopencard_All') : `${guaopencard}`);
-guaopenwait = $.isNode() ? (process.env.guaopenwait71 ? process.env.guaopenwait71 : `${guaopenwait}`) : ($.getdata('guaopenwait71') ? $.getdata('guaopenwait71') : `${guaopenwait}`);
+guaopenwait = $.isNode() ? (process.env.guaopenwait73 ? process.env.guaopenwait73 : `${guaopenwait}`) : ($.getdata('guaopenwait73') ? $.getdata('guaopenwait73') : `${guaopenwait}`);
 guaopenwait = $.isNode() ? (process.env.guaopenwait_All ? process.env.guaopenwait_All : `${guaopenwait}`) : ($.getdata('guaopenwait_All') ? $.getdata('guaopenwait_All') : `${guaopenwait}`);
 guaopenwait = parseInt(guaopenwait, 10) || 0
-guaopencard_draw = $.isNode() ? (process.env.guaopencard_draw71 ? process.env.guaopencard_draw71 : guaopencard_draw) : ($.getdata('guaopencard_draw71') ? $.getdata('guaopencard_draw71') : guaopencard_draw);
+guaopencard_draw = $.isNode() ? (process.env.guaopencard_draw73 ? process.env.guaopencard_draw73 : guaopencard_draw) : ($.getdata('guaopencard_draw73') ? $.getdata('guaopencard_draw73') : guaopencard_draw);
 guaopencard_draw = $.isNode() ? (process.env.guaopencard_draw ? process.env.guaopencard_draw : guaopencard_draw) : ($.getdata('guaopencard_draw') ? $.getdata('guaopencard_draw') : guaopencard_draw);
 guaopenwait = parseInt(guaopenwait, 10) || 0
 allMessage = ""
@@ -89,7 +90,7 @@ let activityCookie =''
 !(async () => {
   if ($.isNode()) {
     if(guaopencard+"" != "true"){
-      console.log('如需执行脚本请设置环境变量[guaopencard71]为"true"')
+      console.log('如需执行脚本请设置环境变量[guaopencard73]为"true"')
     }
     if(guaopencard+"" != "true"){
       return
@@ -104,10 +105,10 @@ let activityCookie =''
   // return
   $.appkey = '51B59BB805903DA4CE513D29EC448375'
   $.userId = '10299171'
-  $.actId = '9438536da98941ddafd17f6_1125'
+  $.actId = '0ce138cf44eb4b62999fdf1042_1127'
   $.MixNicks = ''
   $.inviteNick = 'jJngxInVOgsjftAvjP1dgF4tLNYA4seuA67MOIYQxEk3Vl9+AVo4NF+tgyeIc6A6kdK3rLBQpEQH9V4tdrrh0w=='
-  console.log(`活动地址:https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20211125/unitedCardNew20211125?actId=9438536da98941ddafd17f6_1125`)
+  console.log(`活动地址:https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20211125/unitedCardNew20211125?actId=0ce138cf44eb4b62999fdf1042_1127`)
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     if (cookie) {
@@ -208,7 +209,7 @@ async function run() {
         }
       }
     }else{
-      console.log('如需加购请设置环境变量[guaopencard_addSku71]为"true"');
+      console.log('如需加购请设置环境变量[guaopencard_addSku73]为"true"');
     }
     await takePostRequest('activity_load');
     if(guaopencard_draw+"" !== "0"){
@@ -228,7 +229,7 @@ async function run() {
         }
         await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
       }
-    }else console.log('如需抽奖请设置环境变量[guaopencard_draw71]为"3" 3为次数');
+    }else console.log('如需抽奖请设置环境变量[guaopencard_draw73]为"3" 3为次数');
     await takePostRequest('myAward');
     await takePostRequest('missionInviteList');
     console.log($.MixNick)
