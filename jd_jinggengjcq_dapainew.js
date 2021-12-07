@@ -3,7 +3,7 @@ https://jinggengjcq-isv.isvjcloud.com/fronth5/#/pages/unitedCardNew20211029/unit
 10-29 11-3
 */
 const $ = new Env("大牌联合");
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./utils/jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 const cp = $.isNode() ? require('child_process') : '';
 let cookiesArr = [], cookie = '', message = '';
