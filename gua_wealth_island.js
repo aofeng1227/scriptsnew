@@ -1,7 +1,7 @@
 /*
   https://st.jingxi.com/fortune_island/index2.html
 
-  18 0-23/2 * * * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_wealth_island.js 财富大陆
+  18 0,6-23/2 * * * https://raw.githubusercontent.com/smiek2121/scripts/master/gua_wealth_island.js 财富大陆
 
 */
 
@@ -20,7 +20,7 @@ function randomString(e) {
 }
 $.InviteList = []
 $.innerInviteList = [];
-const HelpAuthorFlag = false;//是否助力作者SH  true 助力，false 不助力
+const HelpAuthorFlag = true;//是否助力作者SH  true 助力，false 不助力
 
 // 热气球接客 每次运行接客次数
 let serviceNum = 10;// 每次运行接客次数
@@ -351,7 +351,7 @@ async function StoryInfo(){
 async function buildList(){
   try{
     await $.wait(2000)
-    console.log(`\n升级房屋、收集金币`)
+    console.log(`\n升级房屋、收集金币\n(升级：需要当前金币大于升级金币的3.5倍)`)
     if($.buildList){
       for(let i in $.buildList){
         let item = $.buildList[i]
@@ -377,7 +377,7 @@ async function buildList(){
           if(item.dwLvl == 0){
             await taskGet(`user/createbuilding`, stk, additional)
           }else{
-            if(GetBuildInfo){
+            if(GetBuildInfo && GetBuildInfo.ddwNextLvlCostCoin * 3.5 < parseInt($.HomeInfo.ddwCoinBalance,10)){
               additional = `&strBuildIndex=${GetBuildInfo.strBuildIndex}&ddwCostCoin=${GetBuildInfo.ddwNextLvlCostCoin}`
               stk = `_cfd_t,bizCode,ddwCostCoin,dwEnv,ptag,source,strBuildIndex,strZone`
               let update = await taskGet(`user/BuildLvlUp`, stk, additional)
