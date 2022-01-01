@@ -183,7 +183,7 @@ let isLogin = false;
 if (process.env.NOTIFY_SHOWNAMETYPE) {
     ShowRemarkType = process.env.NOTIFY_SHOWNAMETYPE;
 }
-async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By https://github.com/KingRan/JDJB',strsummary="") {
+async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By https://github.com/aofeng1227/scriptsnew',strsummary="") {
     console.log(`开始发送通知...`);
     try {
         //Reset 变量
