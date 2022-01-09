@@ -1,5 +1,5 @@
 /*
-1.5~1.31 年货盛宴，春节集福攻略
+1.7~1.26 集“年味卡”，享年货盛宴 
 新增开卡脚本，一次性脚本
 
 1.邀请一人10豆
@@ -7,22 +7,26 @@
 3.关注5豆 
 4.抽奖
 5.集卡 
-6.大于1张福卡时 31号会通知瓜分
+6.大于1张福卡时 1月27号会通知瓜分
+
+第一个账号助力作者 其他依次助力CK1
+第一个CK失效会退出脚本
 
 ————————————————
-入口：[ 1.5~1.31 年货盛宴，春节集福攻略 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity/9810692?activityId=cd20220105fff606x19uj4vijetkg&shareUuid=1ade9f197b6d4966846d69f26e533717)]
+入口：[ 1.7~1.26 集“年味卡”，享年货盛宴 (https://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=cd20220107vcowv119979tm7p&shareUuid=5ab83c656ec648a9b417b4ae5824730a)]
 
+请求太频繁会被黑ip
+过10分钟再执行
 
-cron:5 0,17 5-31 1 *
+cron:30 2,10 7-27 1 *
 ============Quantumultx===============
 [task_local]
-1.5~1.31 年货盛宴，春节集福攻略
-5 0,17 5-31 1 *  jd_opencardL39.js, tag=1.5~1.31 年货盛宴，春节集福攻略, enabled=true
-
+#1.7~1.26 集“年味卡”，享年货盛宴
+30 2,10 7-27 1 * jd_opencard98.js, tag=1.7~1.26 集“年味卡”，享年货盛宴, enabled=true
 
 */
 
-const $ = new Env('1.5~1.31 年货盛宴，春节集福攻略');
+const $ = new Env('1.7~1.26 集“年味卡”，享年货盛宴');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie
@@ -37,6 +41,7 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
+
 allMessage = ""
 message = ""
 $.hotFlag = false
@@ -44,17 +49,18 @@ $.outFlag = false
 $.activityEnd = false
 let lz_jdpin_token_cookie =''
 let activityCookie =''
-const activeEndTime = '2022/01/31 00:00:00+08:00';//活动结束时间
+const activeEndTime = '2022/01/27 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
 !(async () => {
+  console.log('自行测试是否有水，没水请禁止运行')
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {
       "open-url": "https://bean.m.jd.com/"
     });
     return;
   }
-  $.activityId = "cd20220105fff606x19uj4vijetkg"
-  $.shareUuid = "1ade9f197b6d4966846d69f26e533717"
+  $.activityId = "cd20220107vcowv119979tm7p"
+  $.shareUuid = "5ab83c656ec648a9b417b4ae5824730a"
   console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
 
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -79,7 +85,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     if ($.isNode()) await notify.sendNotify(`${$.name}`, `${msg}`);
   }
   if(allMessage){
-    allMessage = `以下账号可参与瓜分京豆\n${allMessage}\n`
+    allMessage = `以下账号可参与瓜分京豆\n${allMessage}\n入口：https://3.cn/104c1-1d6`
     $.msg($.name, ``, `${allMessage}`);
     if ($.isNode()) await notify.sendNotify(`${$.name}`, `${allMessage}`);
   }
@@ -127,7 +133,7 @@ async function run() {
       console.log('获取不到[actorUuid]退出执行，请重新执行')
       return
     }
-    if(($.hasEnd === true || Date.now() > $.endTime) && nowTime > new Date('2022/02/1 00:00:00+08:00').getTime()){
+    if(($.hasEnd === true || Date.now() > $.endTime) && nowTime > new Date('2022/01/27 00:00:00+08:00').getTime()){
       $.activityEnd = true
       console.log('活动结束')
       return
@@ -156,7 +162,7 @@ async function run() {
     }else{
       console.log('已全部开卡')
     }
-    await takePostRequest('addSku');
+    
     $.log("关注: " + $.followShop)
     if(!$.followShop && !$.outFlag){
       flag = true
@@ -168,6 +174,7 @@ async function run() {
     if($.yaoqing){
       await takePostRequest('邀请');
     }
+
     if(flag){
       await takePostRequest('activityContent');
     }
@@ -175,7 +182,6 @@ async function run() {
     if($.drawCardNum){
       let count = $.drawCardNum
       for(m=1;count--;m++){
-        if($.compositeCardNum > 0) break
         console.log(`第${m}次集卡`)
         await takePostRequest('集卡');
         await takePostRequest('getCardInfo');
@@ -239,6 +245,7 @@ async function run() {
     }
     await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
     if(flag) await $.wait(parseInt(Math.random() * 1000 + 10000, 10))
+
       if($.index % 3 == 0) console.log('休息1分钟，别被黑ip了\n可持续发展')
       if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 60000, 10))
   } catch (e) {
@@ -331,7 +338,7 @@ async function takePostRequest(type) {
       case 'visitSku':
       case 'toShop':
       case 'addSku':
-        url = `${domain}/play/monopoly/doTasks`;
+        url = `${domain}/dingzhi/dz/openCard/saveTask`;
         let taskType = ''
         let taskValue = ''
         if(type == 'viewVideo'){
@@ -344,8 +351,8 @@ async function takePostRequest(type) {
           taskType = 14
           taskValue = $.toShopValue || 14
         }else if(type == 'addSku'){
-          taskType = 21
-          taskValue = $.addSkuValue || 21
+          taskType = 2
+          taskValue = $.addSkuValue || 2
         }
         body = `activityId=${$.activityId}&pin=${encodeURIComponent($.Pin)}&actorUuid=${$.actorUuid}&taskType=${taskType}&taskValue=${taskValue}`
         break;
