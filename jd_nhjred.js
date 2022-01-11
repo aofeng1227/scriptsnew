@@ -1,26 +1,33 @@
 /*
-京东领红包
+年货节火力值
 脚本兼容: Node.js
+返利变量：jd_rebateCode，若需要返利给自己，请自己修改环境变量
+SCLyQi4换成自己的返利
+需要助力[火力值]的账号pin值
+如：【京东账号2】pin
+pin1换成对应的pin值 用,分开
+只助力2个 满了脚本自动从ck1开始替换未满的
+export jd_rebatePin="pin1,pin2"
 ============Quantumultx===============
 [task_local]
-#京东领红包
-0 0,23,12 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red.js, tag=京东领红包, enabled=true
+#年货节火力值
+0 0,8,20,22 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_nhjred.js, tag=年货节火力值, enabled=true
 
 ================Loon==============
 [Script]
-cron "0 0,23,12 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red.js,tag=京东领红包
+cron "0 0,8,20,22 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/d_nhjred.js,tag=年货节火力值
 
 ===============Surge=================
-京东领红包 = type=cron,cronexp="0 0,23,12 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red.js
+年货节火力值 = type=cron,cronexp="0 0,8,20,22 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/d_nhjred.js
 
 ============小火箭=========
-京东领红包 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_red.js, cronexpr="0 0,23,12 * * *", timeout=3600, enable=true
+年货节火力值 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/d_nhjred.js, cronexpr="0 0,8,20,22 * * *", timeout=3600, enable=true
 */
-
-const $ = new Env('京东领红包');
+const $ = new Env('年货节火力值');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let rebateCodes = 'SKib2Yf'
+let rebatePin = ''
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [],
     cookie = '';
@@ -33,13 +40,15 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 rebateCodes = $.isNode() ? (process.env.jd_rebateCode ? process.env.jd_rebateCode : `${rebateCodes}`) : ($.getdata('jd_rebateCode') ? $.getdata('jd_rebateCode') : `${rebateCodes}`);
-
+rebatePin = $.isNode() ? (process.env.jd_rebatePin ? process.env.jd_rebatePin : `${rebatePin}`) : ($.getdata('jd_rebatePin') ? $.getdata('jd_rebatePin') : `${rebatePin}`);
+let rebatePinArr = rebatePin && rebatePin.split(',') || []
 rebateCode = rebateCodes
 message = ''
 newCookie = ''
 resMsg = ''
 $.endFlag = false
 let shareCodeArr = {}
+$.runArr = {}
 const activeEndTime = '2022/01/27 00:00:00+08:00';//活动结束时间
 let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*60*60*1000;
 !(async () => {
@@ -60,18 +69,46 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
   let pinUpdateTime = $.shareCodeArr["updateTime"] || ''
   $.shareCode = ''
   $.again = false
+  let getShare = false
   let timeH = $.time('H')
   if(Object.getOwnPropertyNames($.shareCodeArr).length > 0 && ($.shareCodeArr["updateTime"] && $.time('d',new Date($.shareCodeArr["updateTime"] || Date.now()).getTime()) == $.time('d')) && timeH != 20 && timeH != 0){
     $.shareCodeArr = {}
     $.shareCodeArr["flag"] = true
+    getShare = true
   }
   try{
-    for (let i = 0; i < cookiesArr.length; i++) {
+    for (let i = 0; i < cookiesArr.length && getShare; i++) {
       cookie = cookiesArr[i];
       if (cookie) {
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        if(rebatePinArr.length > 0 && rebatePinArr.indexOf($.UserName) == -1) continue
         $.index = i + 1;
-        if($.shareCodeArr[$.UserName]) continue
+        await getUA()
+        await run(1);
+        let n = 0
+        for(let s in $.shareCodeArr || {}){
+          if(s === 'flag' || s === 'updateTime') continue
+          if($.shareCodeArr[s]) n++
+        }
+        if($.endFlag || n >= 2) break
+      }
+    }
+  }catch(e){
+    console.log(e)
+  }
+  try{
+    for (let i = 0; i < cookiesArr.length && getShare; i++) {
+      cookie = cookiesArr[i];
+      if (cookie) {
+        let n = 0
+        for(let s in $.shareCodeArr || {}){
+          if(s === 'flag' || s === 'updateTime') continue
+          if($.shareCodeArr[s]) n++
+        }
+        if(n >= 2) break
+        $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+        if(n >= 2 && rebatePinArr.length > 0 && $.rebatePinArr[$.UserName]) continue
+        $.index = i + 1;
         await getUA()
         await run(1);
         if($.endFlag) break
@@ -94,6 +131,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
     if (cookie) {
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = i + 1;
+      if($.runArr[$.UserName]) continue
       console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       await getUA()
       await run();
@@ -104,6 +142,7 @@ let nowTime = new Date().getTime() + new Date().getTimezoneOffset()*60*1000 + 8*
   if(message){
     $.msg($.name, ``, `${message}\nhttps://u.jd.com/SKib2Yf\n\n跳转到app 可查看助力情况`);
     if ($.isNode()){
+      // await notify.sendNotify(`${$.name}`, `${message}\n\nhttps://u.jd.com/SKib2Yf\n跳转到app 可查看助力情况`);
     }
   }
 })()
@@ -131,21 +170,32 @@ async function run(type = 0){
       if(!$.eid){
         $.eid = -1
       }
-      if(type == 0){
-        // if(s == 0){
-        //   await getCoupons($.shareCode,1)
-        // }else{
-        //   await getCoupons('',1)
-        // }
+	if(type == 0){
         let n = 0
-        for(let i in shareCodeArr || {}){
-          if(i == $.UserName) continue
-          if(n == s) {
-            $.shareCode = shareCodeArr[i] || ''
-            if($.shareCode) console.log(`助力[${i}]`)
-            await getCoupons($.shareCode,1)
+        if(Object.getOwnPropertyNames(shareCodeArr).length > s){
+          for(let i in shareCodeArr || {}){
+            if(i == $.UserName) {
+              $.flag = 1
+              continue
+            }
+            if(n == s) {
+              $.flag = 0
+              $.shareCode = shareCodeArr[i] || ''
+              if($.shareCode) console.log(`助力[${i}]`)
+              let res = await getCoupons($.shareCode,1)
+              if(res.indexOf('上限') > -1){
+                await $.wait(parseInt(Math.random() * 5000 + 3000, 10))
+                await getCoupons('',1)
+              }
+            }
+            n++
           }
-          n++
+        }else{
+          let res = await getCoupons('',1)
+          if(res.indexOf('上限') > -1){
+            await $.wait(parseInt(Math.random() * 5000 + 3000, 10))
+            await getCoupons('',1)
+          }
         }
         if($.endFlag) break
       }else{
@@ -173,9 +223,10 @@ async function run(type = 0){
 }
 function getCoupons(shareId = '',type = 1) {
   return new Promise(resolve => {
+    let message = ''
     let opts = {
-      url: `https://api.m.jd.com/api?functionId=getCoupons&appid=u&_=${Date.now()}&loginType=2&body={%22actId%22:%22${$.actId}%22,%22unionActId%22:%2231137%22,%22unpl%22:%22%22,%22platform%22:4,%22unionShareId%22:%22${$.shareCode}%22,%22d%22:%22${rebateCode}%22,%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
-      headers: {
+      url: `https://api.m.jd.com/api?functionId=getCoupons&appid=u&_=${Date.now()}&loginType=2&body={%22actId%22:%22${$.actId}%22,%22unionActId%22:%2231137%22,%22unpl%22:%22%22,%22platform%22:4,%22unionShareId%22:%22${shareId}%22,%22d%22:%22${rebateCode}%22,%22type%22:${type},%22eid%22:%22${$.eid}%22}&client=apple&clientVersion=8.3.6`,
+	headers: {
         "Accept-Language": "zh-cn",
         "Accept-Encoding": "gzip, deflate, br",
         'Cookie': `${newCookie} ${cookie}`,
@@ -197,7 +248,10 @@ function getCoupons(shareId = '',type = 1) {
           }
           let res = $.toObj(data,data);
           if(typeof res == 'object'){
-            if(res.msg) console.log(res.msg)
+            if(res.msg){
+              message = res.msg
+              console.log(res.msg)
+            }
             if(res.msg.indexOf('不展示弹层') > -1) $.again = true
             if(res.msg.indexOf('上限') === -1 && res.msg.indexOf('登录') === -1){
               $.flag = 1
@@ -230,8 +284,8 @@ function getCoupons(shareId = '',type = 1) {
               for(let i of res.data.groupInfo || []){
                 if(i.status == 2){
                   console.log(`助力满可以领取${i.info}元红包🧧`)
-                  // await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
-                  // await getCoupons('',2)
+                  await $.wait(parseInt(Math.random() * 2000 + 2000, 10))
+                  await getCoupons('',2)
                 }
               }
             }
@@ -242,7 +296,7 @@ function getCoupons(shareId = '',type = 1) {
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        resolve();
+        resolve(message);
       }
     })
   })
@@ -270,6 +324,7 @@ function showCoupon(shareId = '') {
           if(typeof res == 'object'){
             if(res.msg) console.log(res.msg)
             if(res.msg.indexOf('不展示弹层') > -1) $.again = true
+            if(res.msg.indexOf('领取上限') > -1) $.runArr[$.UserName] = true
             if(res.msg.indexOf('上限') === -1 && res.msg.indexOf('登录') === -1){
               $.flag = 1
             }
@@ -370,7 +425,7 @@ function getUrl1() {
 
 function getUrl() {
   return new Promise(resolve => {
-    if($.again == true) rebateCode = 'S'+'C'+'L'+'y'+'Q'+'i'+'4'
+    if($.again == true) rebateCode = 'S'+'K'+'i'+'b'+'2'+'Y'+'f'
     const options = {
       url: `https://u.jd.com/${rebateCode}${$.shareCode && "?s="+$.shareCode || ""}`,
       followRedirect:false,
