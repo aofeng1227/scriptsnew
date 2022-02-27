@@ -51,7 +51,23 @@ let randomCount = $.isNode() ? 20 : 5;
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
 let NowHour = new Date().getHours();
-let llhelp=true;
+let llhelp = true;
+const fs = require('fs');
+let boolneedUpdate = false;
+let strShare = './Fruit_ShareCache.json';
+let Fileexists = fs.existsSync(strShare);
+let TempShareCache = [];
+if (Fileexists) {
+    console.log("检测到东东农场缓存文件Fruit_ShareCache.json，载入...");
+    TempShareCache = fs.readFileSync(strShare, 'utf-8');
+    if (TempShareCache) {
+        TempShareCache = TempShareCache.toString();
+        TempShareCache = JSON.parse(TempShareCache);
+    }
+}
+let lnrun = 0;
+let llgetshare = false;
+let NoNeedCodes = [];
 !(async() => {
     await requireConfig();
     if (!cookiesArr[0]) {
@@ -59,7 +75,7 @@ let llhelp=true;
         return;
     }
   if(llhelp){
-    console.log('开始收集您的互助码，用于账号内部互助，请稍等...');
+    console.log('\n【开始收集您的互助码，用于账号内部互助，请稍等...】\n');
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -71,19 +87,41 @@ let llhelp=true;
             if (!$.isLogin) {
                 $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
 
-                if ($.isNode()) {
-                    await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-                }
-                continue
-            }
-            message = '';
-            subTitle = '';
-            option = {};
-            $.retry = 0;
-		  await GetCollect();
-		}
-	  }
-	}
+                  if ($.isNode()) {
+                      await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+                  }
+                  continue
+              }
+              message = '';
+              subTitle = '';
+              option = {};
+              $.retry = 0;
+			  llgetshare = false;
+              await GetCollect();
+			  if(llgetshare){
+				  await $.wait(5000);
+				  lnrun++;				  
+			  }
+			  if(lnrun == 10){
+				  console.log(`\n【访问接口次数达到10次，休息一分钟.....】\n`);
+				  await $.wait(60*1000);
+				  lnrun = 0;
+			  }
+          }
+      }
+      if (boolneedUpdate) {
+          var str = JSON.stringify(TempShareCache, null, 2);
+          fs.writeFile(strShare, str, function (err) {
+              if (err) {
+                  console.log(err);
+                  console.log("\n【缓存文件Fruit_ShareCache.json更新失败!】\n");
+              } else {
+                  console.log("\n【缓存文件Fruit_ShareCache.json更新成功!】\n");
+              }
+          })
+      }
+  }
+  console.log('\n【互助码已经收集完毕，现在开始账号内部互助，请稍等...】\n');
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -105,7 +143,13 @@ let llhelp=true;
             subTitle = '';
             option = {};
             $.retry = 0;
-            await jdFruit();
+          lnrun++;
+          await jdFruit();
+          if (lnrun == 3) {
+              console.log(`\n【访问接口次数达到3次，休息一分钟.....】\n`);
+              await $.wait(60 * 1000);
+              lnrun = 0;
+          }
         }
     }
     if ($.isNode() && allMessage && $.ctrTemp) {
@@ -223,7 +267,7 @@ async function turntableFarm() {
 }
 //助力好友
 async function masterHelpShare() {
-  
+  await $.wait(2000);
   await initForFarm();
   let salveHelpAddWater = 0;
   let remainTimes = 3;//今日剩余助力次数,默认3次（京东农场每人每天3次助力机会）。
@@ -231,6 +275,19 @@ async function masterHelpShare() {
   if(llhelp){
 	  console.log('开始助力好友')
 	  for (let code of newShareCodes) {
+		if(NoNeedCodes){
+			var llnoneed=false;
+			for (let NoNeedCode of NoNeedCodes) {
+				if (code==NoNeedCode){
+					llnoneed=true;
+					break;
+				}
+			}
+			if(llnoneed){
+				console.log(`${code}助力已满，跳过...`);
+				continue;
+			}
+		}
 		console.log(`${$.UserName}开始助力: ${code}`);
 		if (!code) continue;
 		if (!$.farmInfo.farmUserPro) {
@@ -254,6 +311,7 @@ async function masterHelpShare() {
 		  } else if ($.helpResult.helpResult.code === '9') {
 			console.log(`【助力好友结果】: 之前给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力过了`);
 		  } else if ($.helpResult.helpResult.code === '10') {
+			NoNeedCodes.push(code);
 			console.log(`【助力好友结果】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
 		  } else {
 			console.log(`助力其他情况：${JSON.stringify($.helpResult.helpResult)}`);
@@ -297,18 +355,46 @@ async function masterHelpShare() {
 }
 
 async function GetCollect() {
-  try {
-    await initForFarm();
-    if ($.farmInfo.farmUserPro) {
-      console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}`);
-      newShareCodes.push($.farmInfo.farmUserPro.shareCode)
-    } else {
-      console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】\n数据异常`);
+    try {
+		console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】`);
+        var llfound = false;
+        var strShareCode = "";
+        if (TempShareCache) {
+            for (let j = 0; j < TempShareCache.length; j++) {
+                if (TempShareCache[j].pt_pin == $.UserName) {
+                    llfound = true;
+                    strShareCode = TempShareCache[j].ShareCode;
+                }
+            }
+        }
+        if (!llfound) {
+            console.log($.UserName + "该账号无缓存，尝试联网获取互助码.....");
+			llgetshare=true;
+            await initForFarm();			
+            if ($.farmInfo.farmUserPro) {
+                var tempAddCK = {};
+				strShareCode=$.farmInfo.farmUserPro.shareCode;
+                tempAddCK = {
+                    "pt_pin": $.UserName,
+                    "ShareCode": strShareCode
+                };
+                TempShareCache.push(tempAddCK);
+                //标识，需要更新缓存文件
+                boolneedUpdate = true;
+            }
+        }
+
+        if (strShareCode) {
+            console.log(`\n`+strShareCode);
+            newShareCodes.push(strShareCode)
+        } else {
+            console.log(`\n数据异常`);
+        }
+    } catch (e) {
+        $.logErr(e);
     }
-  } catch (e) {
-    $.logErr(e);
-  }
 }
+
 // ========================API调用接口========================
 //鸭子，点我有惊喜
 async function getFullCollectionReward() {
@@ -699,7 +785,7 @@ function TotalBean() {
     })
 }
 
-function request(function_id, body = {}, timeout = 1000) {
+function request(function_id, body = {}, timeout = 2000) {
     return new Promise(resolve => {
         setTimeout(() => {
             $.get(taskUrl(function_id, body), (err, resp, data) => {
