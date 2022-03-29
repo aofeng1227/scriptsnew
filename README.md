@@ -1,57 +1,37 @@
-# 自用库
-个人自用最全主库，集合可用脚本，适用于青龙面板。
+
+请不要传播！请不要传播！请不要传播！
+
+
+君子慎独，不欺暗室， 卑以自牧，含章可贞。 
+大丈夫立于天地之间， 当仰天地浩然正气， 行光明磊落之事。 
+克己，慎独，守心，明性。 
+以克人之心克己， 以容己之心容人。
+
+言尽于此，不想解释也不想回答，建议不要使用本库。免生是非！！！
+
+无互助池，无需配置互助码，账号之间内部互助。
+
+目前有加密的如下（不放心请禁用）
+
+1.jd_zdjr.js   （组队瓜分）
+2.jd_cjzdgf.js （组队瓜分）
+3.jd_zjd.js   （赚京豆）
+4.jd_fan.js  （粉丝互动）
+5.jd_js_sign.js （极速版签到提现）
+6.jd_jx_sign.js （京东-京喜双签）
+7.jd_computer.js （电脑配件通用任务）
+
+另外涉及开卡均有部分加密。
+
+青龙 config.sh 文件中修改
+
+## ql repo命令拉取脚本时需要拉取的文件后缀，直接写文件后缀名即可
+RepoFileExtensions="js py ts"
+
 
 频道：https://t.me/KingRan521
 
-拉库命令：
-
-国内鸡：
-
-ql repo https://ghproxy.com/github.com/aofeng1227/scriptsnew.git "jd_|jx_|jdCookie" "activity|backUp" "^jd[^_]|USER|utils|function|sign|sendNotify|ql|JDJR"
-
-国外鸡：
-
-ql repo https://github.com/aofeng1227/scriptsnew.git "jd_|jx_|jdCookie" "activity|backUp" "^jd[^_]|USER|utils|function|sign|sendNotify|ql|JDJR"
-
-
-1、搬运整理，感谢所有原作者。
-
-2、个人学习目的，请下载后24小时内删除下载的代码。
-
-
-1.出现这种错误：
-
-Cannot find module 'xxxx'
-
-依赖不完整，解决方法：
-
-docker exec -it qinglong(容器名称) bash
-
-cd /ql/scripts/
-
-pnpm install 'xxxx'
-
-npm install 'xxxx'
-
-这两个安装命令都可以用
-
-2.出现这种错误：
-
-Cannot find module './xxxx'
-
-那就很有是拉库命令不完整，请检查或复制完整的拉库命令。
-
-部分需要的依赖：自行安装
-
-"npm install -g npm"
-
-"pip3 install requests"
-
-"pip3 install pytz"
-
-"npm install -g download"
-
-"pnpm install jsdom"
-
-"apk add --no-cache build-base g++ cairo-dev pango-dev giflib-dev && cd scripts && npm install canvas png-js md5 date-fns axios crypto-js tslib ts-md5 @types/node --build-from-source"
+腾讯云活动：
+2核2G4M/40RMB/一年，仅限新用户，一个实名可以注册3个新用户账号
+抢购地址：https://sourl.cn/RFwHRZ
 
