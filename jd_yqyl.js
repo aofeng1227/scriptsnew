@@ -24,14 +24,14 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let yqm = '';
-let zdtx = false //设置为true自动抢提现100
+let zdtx = true //设置为true自动抢提现100
 if (process.env.yqm) {
     yqm = process.env.yqm;
 }
 if (process.env.zdtx) {
     zdtx = process.env.zdtx;
 }
-let helpAuthorFlag = true;//是否助力作者SH  true 助力，false 不助力
+let helpAuthorFlag = false;//是否助力作者SH  true 助力，false 不助力
 let helpAuthorInfo = []
 
 if ($.isNode()) {
