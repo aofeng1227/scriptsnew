@@ -8,17 +8,17 @@
 ============Quantumultx===============
 [task_local]
 #京喜财富岛互助
-18 0,18 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_cfd_help.js, tag=京喜财富岛互助, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
+33 0,14 * * * https://raw.githubusercontent.com/KingRan/KR/main/jd_cfd_help.js, tag=京喜财富岛互助, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxcfd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "18 0,18 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_cfd_help.js,tag=京喜财富岛互助
+cron "33 0,14 * * *" script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_cfd_help.js,tag=京喜财富岛互助
 
 ===============Surge=================
-京喜财富岛互助 = type=cron,cronexp="18 0,18 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_cfd_help.js
+京喜财富岛互助 = type=cron,cronexp="33 0,14 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_cfd_help.js
 
 ============小火箭=========
-京喜财富岛互助 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_cfd_help.js, cronexpr="18 0,18 * * *", timeout=3600, enable=true
+京喜财富岛互助 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_cfd_help.js, cronexpr="33 0,14 * * *", timeout=3600, enable=true
   
 */
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
@@ -1385,7 +1385,7 @@ function taskUrl(function_path, body = '', dwEnv = 7) {
       "User-Agent": UA,
       "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "Referer": "https://st.jingxi.com/",
-      "Cookie": cookie
+      "Cookie": `cid=4;${cookie}`
     }
   }
 }
@@ -1403,7 +1403,7 @@ function taskListUrl(function_path, body = '', bizCode = 'jxbfd') {
       "User-Agent": UA,
       "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "Referer": "https://st.jingxi.com/",
-      "Cookie": cookie
+      "Cookie": `cid=4;${cookie}`
     }
   }
 }
