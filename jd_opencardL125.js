@@ -1,5 +1,5 @@
 /*
-4.18~5.5 甄选大牌 品质嗨购
+4.25~5.5 大牌生活范 优价放心购
 新增开卡脚本，一次性脚本
 
 
@@ -7,20 +7,20 @@
 第一个CK失效会退出脚本
 
 
-入口：[ 4.18~5.5 甄选大牌 品质嗨购]
+入口：[ 4.25~5.5 大牌生活范 优价放心购]
 
 请求太频繁会被黑ip
 过10分钟再执行
 
-cron:50 2,18 1-5,18-30 4,5 *
+cron:33 0 26-30,1-5 4,5 *
 ============Quantumultx===============
 [task_local]
-#4.18~5.5 甄选大牌 品质嗨购
-50 2,18 1-5,18-30 4,5 * jd_opencardL119.js, tag=4.18~5.5 甄选大牌 品质嗨购, enabled=true
+#4.25~5.5 大牌生活范 优价放心购
+33 0 26-30,1-5 4,5 * jd_opencardL125.js, tag=4.25~5.5 大牌生活范 优价放心购, enabled=true
 
 */
 
-const $ = new Env('4.18~5.5 甄选大牌 品质嗨购')
+const $ = new Env('4.25~5.5 大牌生活范 优价放心购')
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 CryptoScripts()
@@ -52,10 +52,10 @@ let activityCookie =''
     });
     return;
   }
-  $.activityId = "dzlhkk081f1bc4bacd11ec99b60200"
-  $.shareUuid = "d18c095e2b9048ec97e4e667da84c4a4"
+  $.activityId = "dzlhkkb2cf44b9b60ad047e6174aec"
+  $.shareUuid = "e71233e3034149baabadf245a720c76c"
   console.log(`入口:\nhttps://lzdz1-isv.isvjcloud.com/dingzhi/customized/common/activity?activityId=${$.activityId}&shareUuid=${$.shareUuid}`)
-  let shareUuidArr = ["d18c095e2b9048ec97e4e667da84c4a4","620aeb94cd3146368fc0d6bf4f3cff92"]
+  let shareUuidArr = ["e71233e3034149baabadf245a720c76c","7ff65d5271e840bab688c7127c9ad9f2","fdd5d3a0fb464103a920f745cc89692e"]
   let s = Math.floor((Math.random()*3))
   let n = 0
   n = Math.floor((Math.random()*shareUuidArr.length))
@@ -226,9 +226,6 @@ async function run() {
       $.shareUuid = $.actorUuid
       console.log(`后面的号都会助力:${$.shareUuid}`)
     }
-    await $.wait(parseInt(Math.random() * 1000 + 5000, 10))
-      if($.index % 3 == 0) console.log('休息一下，别被黑ip了\n可持续发展')
-      if($.index % 3 == 0) await $.wait(parseInt(Math.random() * 5000 + 30000, 10))
   } catch (e) {
     console.log(e)
   }
@@ -750,12 +747,13 @@ async function joinShop() {
     let activityId = ``
     if ($.shopactivityId) activityId = `,"activityId":${$.shopactivityId}`
     let body = `{"venderId":"${$.joinVenderId}","shopId":"${$.joinVenderId}","bindByVerifyCodeFlag":1,"registerExtend":{},"writeChildFlag":0${activityId},"channel":406}`
-    let h5st = 'undefined'
-    try {
-      h5st = await h5stSign(body, "bindWithVender") || 'undefined'
-    } catch (e) {
-      h5st = 'undefined'
-    }
+    let h5st = '20220412164634306%3Bf5299392a200d6d9ffced997e5790dcc%3B169f1%3Btk02wc0f91c8a18nvWVMGrQO1iFlpQre2Sh2mGtNro1l0UpZqGLRbHiyqfaUQaPy64WT7uz7E%2FgujGAB50kyO7hwByWK%3B77c8a05e6a66faeed00e4e280ad8c40fab60723b5b561230380eb407e19354f7%3B3.0%3B1649753194306'    
+	//let h5st = 'undefined'
+    //try {
+    //  h5st = await h5stSign(body, "bindWithVender") || 'undefined'
+    //} catch (e) {
+    //  h5st = 'undefined'
+    //}
     const options = {
       url: `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=bindWithVender&body=${body}&clientVersion=9.2.0&client=H5&uuid=88888&h5st=${h5st}`,
       headers: {
@@ -801,12 +799,13 @@ async function joinShop() {
 async function getshopactivityId() {
   return new Promise(async resolve => {
     let body = `{"venderId":"${$.joinVenderId}","channel":406,"payUpShop":true}`
-    let h5st = 'undefined'
-    try {
-      h5st = await h5stSign(body, "getShopOpenCardInfo") || 'undefined'
-    } catch (e) {
-      h5st = 'undefined'
-    }
+    let h5st = '20220412164634306%3Bf5299392a200d6d9ffced997e5790dcc%3B169f1%3Btk02wc0f91c8a18nvWVMGrQO1iFlpQre2Sh2mGtNro1l0UpZqGLRbHiyqfaUQaPy64WT7uz7E%2FgujGAB50kyO7hwByWK%3B77c8a05e6a66faeed00e4e280ad8c40fab60723b5b561230380eb407e19354f7%3B3.0%3B1649753194306'
+    //let h5st = 'undefined'
+    //try {
+    //  h5st = await h5stSign(body, "getShopOpenCardInfo") || 'undefined'
+    //} catch (e) {
+    //  h5st = 'undefined'
+    //}
     const options = {
       url: `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=getShopOpenCardInfo&body=${body}&clientVersion=9.2.0&client=H5&uuid=88888&h5st=${h5st}`,
       headers: {
