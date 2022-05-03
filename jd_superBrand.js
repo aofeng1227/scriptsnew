@@ -1,9 +1,11 @@
-/**
- 特务Z，默认选择左边战队
+/*
+ 特务集卡
  脚本没有自动开卡，会尝试领取开卡奖励
-1 2,14,20 * * * jd_superBrand.js
- */
-const $ = new Env('特务Z');
+cron:35 10,18,20 * * *
+
+35 10,18,20 * * * jd_superBrand.js
+* */
+const $ = new Env('特务Z-II');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [];
