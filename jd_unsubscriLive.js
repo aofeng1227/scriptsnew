@@ -43,7 +43,7 @@ if ($.isNode()) {
             $.index = i + 1;
             $.isLogin = true;
             $.nickName = '';
-            await TotalBean();
+            //await TotalBean();
             console.log(`\n****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
             if (!$.isLogin) {
                 $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
@@ -136,7 +136,7 @@ function unsubscribeCartsFun(author) {
                 $.result = true;
                 console.log(`取关主播【${$.userName}】成功\n`)
             } else {
-                console.log(`取关主播【${$.userName}】失败：` + data + `\n`)
+                console.log(`取关主播【${$.userName}】失败\n`)
             }
             resolve(data);
         });
