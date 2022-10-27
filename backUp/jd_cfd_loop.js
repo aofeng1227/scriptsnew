@@ -76,7 +76,7 @@ if ($.isNode()) {
         await $.wait(time)
       }
     }
-  } while (count < (process.env.CFD_LOOP_LIMIT || 5)*1)
+  } while (count < (process.env.CFD_LOOP_LIMIT || 1)*1)
 })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done());
@@ -250,7 +250,7 @@ function taskUrl(function_path, body = '', dwEnv = 7) {
       "User-Agent": UA,
       "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "Referer": "https://st.jingxi.com/",
-      "Cookie": cookie
+      "Cookie": cookie + "cid=4"
     }
   };
 }

@@ -3,14 +3,14 @@
 ============Quantumultx===============
 [task_local]
 #店铺签到
-15 2,14 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js, tag=店铺签到, enabled=true
+15 2,14 * * * https://raw.githubusercontent.com/KingRan/KR/main/jd_shop_sign.js, tag=店铺签到, enabled=true
 ===========Loon============
 [Script]
-cron "15 2,14 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js,tag=店铺签到
+cron "15 2,14 * * *" script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_shop_sign.js,tag=店铺签到
 ============Surge=============
-店铺签到 = type=cron,cronexp="15 2,14 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js
+店铺签到 = type=cron,cronexp="15 2,14 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_shop_sign.js
 ===========小火箭========
-店铺签到 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.jss, cronexpr="15 2,14 * * *", timeout=3600, enable=true
+店铺签到 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/KR/main/jd_shop_sign.jss, cronexpr="15 2,14 * * *", timeout=3600, enable=true
 */
 const $ = new Env('店铺签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -25,18 +25,26 @@ let vender=''
 let num=0
 let shopname=''
 const token = [
-"72E86C6A4BF83ED5DAB5696B126A4F3D",
-"EDDEC3265AA4AA5AB434B5C134B0EC67",
-"69B31DB107B9FE242E286E4E8B3E0E75",
-"F3D4A0EF164515A9A90F03DF6964A1A6",
-"1071B720BDB54B6ED8163A6B4116F35F",
-"494AF6FBBCA18925C0BFDB87562C5106",
-"EE19DA0EE109843655ED51468D6F1A20",
-"5F8880D8C7118B422FF327C44CD03055",
-"73A2C9E7D71BB453FDD076E90295A5A4",
-"EC519D173D371D156FCB3EB3D07D0CF2",
-"A4211642777968D9ECBF453A11851593",
-"2FB868C5EECA6778C66F5A0C7AA1493D"
+"456FC4FEC40740E731E77196108FD5A3",
+"02A77E5F09F4461FAEAB8AE574E6087A",
+"4C29D7FE8A2B8CDFE3EBCD2BA2B987B1",
+"52751EB16222B1AA8BC7AF2200B44D53",
+"25E79234BA74F7B425458BD836D60895",
+"8E4BCB032B99B316AC35E147A3E932D2",
+"BE3F7110A5E3FDF0090B8CA5EB12E5EC",
+"0FFD31BE98C83712DF28EDC400719AA3",
+"0B9DAA28ACD83B2381219992258A0D37",
+"6952BB2E69C8D3281946A618B8C0E363",
+"D54C1A3AED73D271485F2C3A57A7F5FA",
+"139E6672D758E576ED3D65F2E68F5B3B",
+"0EAC2D3673E379DC8BF11F6C001D79AA",
+"3DDE6491E1C167588A0DB09D416CC744",
+"3569C202FFF8EED2A875BC2E23DEC7F4",
+"90926F44DA1D018BEC7698BD18818813",
+"812735FEE0EB58CCC06F694BF3FA42F8",
+"A7BCAFEBF64AAEFC668A5069D92A93D0",
+"2C9FC74E0F98264CE0EE3BAF56A37CCD",
+"0CE352C49E77D6354F8F12DD5D6745ED"
 ]
 
 if ($.isNode()) {
@@ -67,7 +75,7 @@ if ($.isNode()) {
       $.isLogin = true;
       $.nickName = '';
       message = '';
-      await TotalBean();
+      //await TotalBean();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
